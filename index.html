@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Astro · 个人主页</title>
+  <style>
+    :root {
+      --main-color: #154360;
+      --bg-color: #f8f9fa;
+      --text-color: #333333;
+}
+
+    header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    nav a {
+      margin-left: 20px;
+    }
+
+   body {
+     background: var(--bg-color);
+     color: var(--text-color);
+     font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+     line-height: 1.8;
+   }
+   
+   html {
+     scroll-behavior: smooth;
+   }
+
+    h1 {
+      color: var(--main-color);
+      font-size: 34px;
+    }
+
+    h2 {
+      color: var(--main-color);
+      font-size: 26px;
+    }
+    a {
+      color: var(--main-color);
+    }
+
+        /* 所有按钮共用：外观 */
+    .btn {
+      background: var(--main-color);
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+      /* 输入框归队：跟页面同一套规矩 */
+    input {
+      padding: 10px 12px;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    /* 只有"返回顶部"需要：钉在右下角 */
+    #back-to-top {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+    }
+
+
+
+  </style>
+</head>
+<body>
+  <!-- 顶部导航：点链接 = 跳到对应板块（机关是 id 名牌） -->
+  <header>
+    <p>Astro</p>
+    <nav>
+      <a href="#留言板">留言板</a>
+      <a href="#hero">开场</a>
+      <a href="#about">关于我</a>
+      <a href="#work">我的作品</a>
+    </nav>
+  </header>
+  <!-- 板块 1：Hero 开场 -->
+  <section id="hero">
+    <h1>我是 Astro</h1>
+    <p>一个假期里自学 AI 编程的学生。我在用 AI 造自动化工具，想证明：零基础的人，也能让电脑替自己干活。</p>
+  </section>
+  <!-- 板块 2：关于我 -->
+  <section id="about">
+    <h2>关于我</h2>
+    <p>我是零基础开始学的——没写过代码。今年假期，我决定用 AI 帮我造东西。</p>
+    <p>先做了我的第一个网页，现在正在学让页面「活起来」。</p>
+    <p>目标：把爸爸公司里那些重复的表格和文档活儿，交给电脑自动干。</p>
+  </section>
+  <!-- 板块 3：我的作品 -->
+  <section id="work">
+    <h2>我的作品</h2>
+    <div id="作品列表"></div>
+  </section>
+  <!-- 板块 4：留言板 -->
+  <section id="留言板">
+    <h2>留言板</h2>
+    <input id="留言输入" placeholder="写下此刻的想法...">
+    <button class="btn" onclick="记住()">记住这句话</button>
+    <p id="留言显示">（还没记住任何东西）</p>
+  </section>
+  <footer>
+    <p>© 2026 Astro</p>
+  </footer>
+    <button id="back-to-top" class="btn" onclick="backToTop()">返回顶部</button>
+
+  <script>
+    const 作品清单 = [
+  { "标题": "会说话的按钮", "描述": "我的第一个 JS 作品，点按钮轮流说两句话。", "链接": "http://localhost:8000/" },
+  { "标题": "留言板（会记住的）", "描述": "写下的话关掉浏览器再打开还在。", "链接": "http://localhost:8001/#留言板" },
+  { "标题": "这个主页", "描述": "用 HTML/CSS/JS 从零搭的，配色和排版是我自己定的。", "链接": "http://localhost:8001/" },
+  { "标题": "我的第一个网页", "描述": "上第一节实操课手写出来的，就一页。", "链接": "http://localhost:8000/" }
+
+];
+  // ① 找到页面上那个空盒子
+  const 作品盒子 = document.getElementById("作品列表");
+
+  // ② 把作品清单一条一条搬进盒子
+  作品清单.forEach(function (一件) {
+    作品盒子.innerHTML += '<div><h3>' + 一件.标题 + '</h3><p>' + 一件.描述 + '</p><a href="' + 一件.链接 + '">去看看这个作品</a></div>';
+});
+
+    // 点"记住"按钮时执行：把输入框里的字，存进浏览器的抽屉
+    function 记住() {
+      const 内容 = document.getElementById("留言输入").value;   // 拿到用户打的字
+      localStorage.setItem("我的留言", 内容);                    // 写进本子
+      document.getElementById("留言显示").textContent = "已记住：" + 内容;  // 页面上回个话
+  }
+    // 页面一打开就执行：先翻抽屉，看上次存了什么
+    const 上次的 = localStorage.getItem("我的留言");
+    if (上次的) {   // 有东西才显示；空的（从没存过）就跳过
+      document.getElementById("留言显示").textContent = "上次你说：" + 上次的;
+  }
+    function backToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>
